@@ -1,5 +1,10 @@
 package com.example.keta
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,7 +30,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import com.example.keta.ui.theme.KetATheme
 
-class MainActivity : ComponentActivity() {
+
+
+class MainActivity : ComponentActivity(), SensorEventListener{
+
+    private val sensorManager by lazy {
+        getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    }
+
+    private val sensor: Sensor? by lazy{
+        sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -34,6 +50,20 @@ class MainActivity : ComponentActivity() {
                 KetAApp()
             }
         }
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(this)
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        TODO("Not yet implemented")
     }
 }
 
